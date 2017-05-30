@@ -13,15 +13,33 @@ router.post('/auth', function (req, res, next) {
     auth.authenticate(username, password, function (status) {
         if(status) {
             // now sign JWT
-            jwt.sign({
-                user: username
-            }, auth.getSecret(), { expiresIn: '3d' }, function (err, token) {
-                if(err) { res.json({'Error': '500', 'Status': 'Server Error'}); }
+            let token = jwt.sign({user: username}, auth.getSecret(), {}, function (err, token) {
+                console.log(token);
             });
-
+            res.json({'Token':token});
         }
-        else { res.json({'Error': 401, 'Status': 'Unauthorized'}); }
+        else { res.json({'Status':'Invalid'}); }
     });
+});
+
+router.get('/query', function(req, res, next) {
+    console.log(req.query.username);
+    console.log(req.query.password);
+    let username = req.query.username;
+    let password = req.query.password;
+    auth.authenticate(username, password, function(status) {
+        res.send(status);
+    });
+});
+
+router.get('/verify', function(req, res, next) {
+    console.log(req.query.jwt);
+    let token = req.query.jwt;
+    jwt.verify(token, auth.getSecret(), function(err, decoded) {
+        console.log(decoded); // bar
+        console.log(err);
+    });
+
 });
 
 router.get('/test', function (req, res, nxt) {
