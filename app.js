@@ -4,24 +4,35 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var passport = require('passport');
+var jwt = require('jsonwebtoken');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-var authProvider = require('./middleware/auth-provider');
-var registerProvider = require('./middleware/register-provider');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-app.use(authProvider);
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// Misc
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+function findUser(username, password) {
+
+}
+
+
+// Routes configuration
 app.use('/', index);
 app.use('/users', users);
 
