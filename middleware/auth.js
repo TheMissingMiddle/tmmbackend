@@ -28,7 +28,7 @@ module.exports.authenticate = function (username, password, callback) {
 }
 
 module.exports.register = function (username, password) {
-    return true; // TODO
+    client.hmset(username, {username:username, password:password});
 }
 
 module.exports.getSecret = function () {
