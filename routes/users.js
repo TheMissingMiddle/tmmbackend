@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var auth = require('../middleware/auth');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/tmmbackend');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log('mongoose: Database connection opened.');
+});
+require('../middleware/install');
+
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
@@ -51,7 +60,9 @@ router.get('/verify', function (req, res, next) {
 });
 
 router.post('register', function (req, res, next) {
-    let username =
+    let username = req.body['username'];
+    let password = req.body['password'];
+    let newUser = install.UserSchema({id: username: username, password: password});
 });
 
 /*
