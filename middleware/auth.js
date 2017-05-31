@@ -7,7 +7,7 @@ var client = redis.createClient({
     'host': '127.0.0.1',
     'password': 'foobar'
 });
-var install = require('../middleware/install');
+var install = require('./mongo');
 var secret = '';
 client.on("error", function (err) {
     console.log("Error " + err);
@@ -57,7 +57,6 @@ module.exports.genRandom = function () {
 
     for( var i=0; i < 15; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    activeSecrets[text] = true;
     return text;
 }
 

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var auth = require('../middleware/auth');
-var install = require('../middleware/install');
+var install = require('../middleware/mongo');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -26,16 +26,6 @@ router.post('/auth', function (req, res, next) {
         else {
             res.json({'Status': 'Invalid'});
         }
-    });
-});
-
-router.get('/query', function (req, res, next) {
-    console.log(req.query.username);
-    console.log(req.query.password);
-    let username = req.query.username;
-    let password = req.query.password;
-    auth.authenticate(username, password, function (status) {
-        res.send(status);
     });
 });
 

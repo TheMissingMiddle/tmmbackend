@@ -11,6 +11,9 @@ var users = require('./routes/users');
 
 var app = express();
 
+// set secret
+require('./middleware/auth').setSecret();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -26,10 +29,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-function findUser(username, password) {
-
-}
 
 
 // Routes configuration
