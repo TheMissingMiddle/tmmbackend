@@ -1,3 +1,7 @@
+
+// set secret
+require('./middleware/auth').setSecret();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,8 +15,6 @@ var users = require('./routes/users');
 var tmmPass = require('./middleware/tmm-passport')
 var app = express();
 
-// set secret
-require('./middleware/auth').setSecret();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
