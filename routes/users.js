@@ -10,12 +10,12 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/auth', function (req, res, next) {
-    let username = req.body['username'];
+    let email = req.body['email'];
     let password = req.body['password'];
-    auth.authenticate(username, password, function (status) {
+    auth.authenticate(email, password, function (status, userId) {
         if (status) {
             // now sign JWT
-            jwt.sign({user: username}, auth.getSecret(), {}, function (err, token) {
+            jwt.sign({email: email, id: userId}, auth.getSecret(), {}, function (err, token) {
                 if (err) {
                     res.json({'Status': 'Error', 'Error': err});
                 } else {

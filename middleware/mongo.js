@@ -18,6 +18,7 @@ var UserSchema = mongoose.Schema({
     firstName: String,
     lastName: String,
     organizationId: Number,
+    contacts: Array,
     country: String,
     provincialDistrict: String,
     city: String,

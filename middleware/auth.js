@@ -18,16 +18,17 @@ module.exports.authenticate = function (email, password, callback) {
         if (err) {
             console.log(err);
             // now we try the cold data
-            install.UserSchema.findOne({'email': email}, 'password salt', function (err, data) {
+            install.UserSchema.findOne({'email': email}, '_id password salt', function (err, data) {
                 if (err) {
-                    callback(false);
+                    callback(false, undefined);
                 } else {
                     let salt = data.salt;
                     let salted = this.hash1(this.hash2(password + salt));
+                    let userId = data._id;
                     if (data.password === salted) {
-                        callback(true);
+                        callback(true, userId);
                     } else {
-                        callback(false);
+                        callback(false, undefined);
                     }
                 }
             });
@@ -35,10 +36,11 @@ module.exports.authenticate = function (email, password, callback) {
         } else {
             let salt = res['salt'];
             let saled = this.hash1(this.hash2(password + salt));
+            let userId = req['_id'];
             if (salted === res['password']) {
-                callback(true);
+                callback(true, userId);
             } else {
-                callback(false);
+                callback(false, undefined);
             }
         }
     });
