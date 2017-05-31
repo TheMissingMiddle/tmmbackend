@@ -15,6 +15,6 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
         } else {
             done('Not Found', false);
         }
-    };
+    });
 }));
 module.exports = passport;
