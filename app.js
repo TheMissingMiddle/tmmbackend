@@ -8,7 +8,7 @@ var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var index = require('./routes/index');
 var users = require('./routes/users');
-
+var tmmPass = require('./middleware/tmm-passport')
 var app = express();
 
 // set secret
@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes configuration
 app.use('/', index);
 app.use('/users', users);
-
+app.all('*', tmmPass);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

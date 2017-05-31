@@ -12,6 +12,7 @@ db.once('open', function () {
 var UserSchema = mongoose.Schema({
     email: String,
     password: String,
+    salt: String,
     registrationDate: Date,
     phone: String,
     firstName: String,
