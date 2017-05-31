@@ -7,22 +7,31 @@ var client = redis.createClient({
     'host': '127.0.0.1',
     'password': 'foobar'
 });
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/tmmbackend');
-
+var install = require('../middleware/install');
+var secret = '';
 client.on("error", function (err) {
     console.log("Error " + err);
 });
 
-module.exports.authenticate = function (username, password, callback) {
-    client.hgetall(username,function(err, res){
-        if(err) {
+module.exports.authenticate = function (email, password, callback) {
+    client.hgetall(email, function (err, res) {
+        if (err) {
             console.log(err);
             // now we try the cold data
-
+            install.UserSchema.findOne({'email': email}, 'password', function (err, data) {
+                if (err) {
+                    callback(false);
+                } else {
+                    if (data.password === password) {
+                        callback(true);
+                    } else {
+                        callback(false);
+                    }
+                }
+            });
             callback(false);
         } else {
-            if(password === res['password']) {
+            if (password === res['password']) {
                 callback(true);
             } else {
                 callback(false);
@@ -31,10 +40,39 @@ module.exports.authenticate = function (username, password, callback) {
     });
 }
 
-module.exports.register = function (username, password) {
-    client.hmset(username, {username:username, password:password});
+module.exports.register = function (email, password, registrationDate, firstName, lastName, callback) {
+    let newUser = install.UserSchema({
+        email: email,
+        password: password,
+        registrationDate: registrationDate,
+        firstName: firstName,
+        lastName: lastName
+    });
+    newUser.save(callback(err));
+}
+
+module.exports.genRandom = function () {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 15; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    activeSecrets[text] = true;
+    return text;
 }
 
 module.exports.getSecret = function () {
-    return 'passwd123';
+    return secret;
+}
+
+var status = false;
+module.exports.setSecret = function () {
+    if(!status) {
+        // first time
+        status = false;
+        secret = this.genRandom();
+    } else {
+        // don't do
+        return false;
+    }
 }

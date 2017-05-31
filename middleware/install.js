@@ -60,7 +60,7 @@ OrganizationSchema.methods.getIdByName = function (name, callback) {
 }
 var OrganizationModel = mongoose.model('Organization', OrganizationSchema);
 
-module.export.UserSchema = UserSchema;
-module.export.UserModel = UserModel;
-module.export.OrganizationSchema = OrganizationSchema;
-module.export.OrganizationModel = OrganizationModel;
+module.exports.UserSchema = UserSchema;
+module.exports.UserModel = UserModel;
+module.exports.OrganizationSchema = OrganizationSchema;
+module.exports.OrganizationModel = OrganizationModel;
