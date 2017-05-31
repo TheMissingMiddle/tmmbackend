@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes configuration
 app.use('/', index);
 app.use('/users', users);
-app.all('*', tmmPass);
+app.all('*', tmmPass.authenticate('jwt', {session:false}));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
