@@ -12,6 +12,7 @@ var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var index = require('./routes/index');
 var users = require('./routes/users');
+var contacts = require('./routes/contacts');
 var tmmPass = require('./middleware/tmm-passport')
 var app = express();
 var allowCrossDomain = function(req, res, next) {
@@ -20,7 +21,29 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     next();
-}
+};
+var jwtTokenHandler = function (req, res, next) {
+    console.log('token handler called. now authenticating...');
+    tmmPass.authenticate('jwt', {session:false}, function (err, data, info) {
+        console.log(err);
+        console.log(data);
+        console.log(info);
+        if(err || info) {
+            res.json({
+                Status: 'Error',
+                Error: (err===undefined||err===null||err==='') ? info : err
+            });
+        } else if (data.id === undefined || data.id === '' || data.email === undefined || data.email === '') {
+            res.json({
+                Status: 'Error',
+                Error: 'Invalid JWT Information'
+            });
+        } else {
+            req.decodedJWTData = data;
+            next();
+        }
+    })(req, res, next);
+};
 
 
 // view engine setup
@@ -42,7 +65,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('*', allowCrossDomain);
 app.use('/', index);
 app.use('/users', users);
-app.all('*', tmmPass.authenticate('jwt', {session:false}));
+app.all('*', jwtTokenHandler);
+app.use('/contacts', contacts);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
