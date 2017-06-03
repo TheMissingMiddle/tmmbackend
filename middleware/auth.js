@@ -58,7 +58,7 @@ module.exports.authenticate = function (email, password, callback) {
         if (err || res == undefined || res == '') {
             console.log(err);
             // now we try the cold data
-            install.UserModel.findOne({'email': email}, '_id password salt', function (err, data) {
+            install.UserModel.findOne({email: email}, '_id password salt', function (err, data) {
                 if (err) {
                     callback(false, undefined);
                 } else {
