@@ -14,6 +14,13 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var tmmPass = require('./middleware/tmm-passport')
 var app = express();
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*'); // GET,PUT,POST,DELETE
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
 
 
 // view engine setup
@@ -31,9 +38,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
 // Routes configuration
+app.use('*', allowCrossDomain);
 app.use('/', index);
 app.use('/users', users);
 app.all('*', tmmPass.authenticate('jwt', {session:false}));

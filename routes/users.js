@@ -13,22 +13,22 @@ router.post('/auth', function (req, res, next) {
     let email = req.body['email'];
     let password = req.body['password'];
     auth.authenticate(email, password, function (status, userId) {
-        console.log(status + userId);
+        console.log(status + ', ' + userId);
         if (status) {
             // now sign JWT
             console.log('status is true, user Id' + userId);
             jwt.sign({email: email, id: userId}, auth.getSecret(), {}, function (err, token) {
                 console.log('signing json');
                 if (err) {
-                    res.json({'Status': 'Error', 'Error': err});
+                    res.json({Status: 'Error', Error: err});
                 } else {
                     console.log('json signed');
-                    res.json({'Token': token, 'Status': 'Success'});
+                    res.json({Token: token, Status: 'Success'});
                 }
             });
         } else {
-            console.log('staatus is false, ' + status);
-            res.json({'Status': 'Invalid'});
+            console.log('status is false, ' + status);
+            res.json({Status: 'Invalid'});
         }
     });
 });
