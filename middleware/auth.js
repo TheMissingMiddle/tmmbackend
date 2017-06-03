@@ -13,6 +13,7 @@ client.on("error", function (err) {
     console.log("Error " + err);
 });
 
+module.exports.redisClient = client;
 
 module.exports.genRandom = function () {
     var text = "";

@@ -3,7 +3,7 @@
  */
 var express = require('express');
 var router = express.Router();
-var mongo = require('../middleware/mongo')
+var mongo = require('../middleware/mongo');
 /*
 module.exports.getContacts = function (userID, callback) {
     mongo.UserSchema.findOne({_id: userID}, 'contacts', callback(err, data));

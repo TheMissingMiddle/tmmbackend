@@ -13,6 +13,7 @@ var jwt = require('jsonwebtoken');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var contacts = require('./routes/contacts');
+var userData = require('./routes/user-data');
 var tmmPass = require('./middleware/tmm-passport')
 var app = express();
 var allowCrossDomain = function(req, res, next) {
@@ -62,11 +63,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Routes configuration
+
+// Public Routes
 app.use('*', allowCrossDomain);
 app.use('/', index);
 app.use('/users', users);
+
+// Protected Routes
 app.all('*', jwtTokenHandler);
 app.use('/contacts', contacts);
+app.use('/user-data', userData);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
