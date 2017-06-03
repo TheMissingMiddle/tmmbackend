@@ -13,17 +13,21 @@ router.post('/auth', function (req, res, next) {
     let email = req.body['email'];
     let password = req.body['password'];
     auth.authenticate(email, password, function (status, userId) {
+        console.log(status + userId);
         if (status) {
             // now sign JWT
+            console.log('status is true, user Id' + userId);
             jwt.sign({email: email, id: userId}, auth.getSecret(), {}, function (err, token) {
+                console.log('signing json');
                 if (err) {
                     res.json({'Status': 'Error', 'Error': err});
                 } else {
+                    console.log('json signed');
                     res.json({'Token': token, 'Status': 'Success'});
                 }
             });
-        }
-        else {
+        } else {
+            console.log('staatus is false, ' + status);
             res.json({'Status': 'Invalid'});
         }
     });
@@ -42,7 +46,7 @@ router.get('/verify', function (req, res, next) {
 
 });
 
-router.post('register', function (req, res, next) {
+router.post('/register', function (req, res, next) {
     let email = req.body['email'];
     let password = req.body['password'];
     let registrationDate = new Date();
